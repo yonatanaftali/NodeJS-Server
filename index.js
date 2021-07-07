@@ -10,12 +10,17 @@ app.get('/', (request, response) => {
 })
 
 app.get('/todos', (request, response) => {
+
+    const showOnlyPending = request.query.showPending
+
     fs.readFile('./store/todos.json', 'utf-8', (err, data) => {
         if (err) // In case readfile failes reading the file for any reason
             return response.status(500).send("Sorry, something went wrong")
         // Otherwise, we need to load the data (that is passed to us as a string) to JSON, so we can manipulate it
         const todos = JSON.parse(data)
-        return response.json({ todos: todos })
+        if (showOnlyPending !== "1")
+            return response.json({ todos: todos })
+        return response.json({ todos: todos.filter(item => item.complete === false) })
     })
 })
 
@@ -39,7 +44,7 @@ app.put('/todos/:id/complete', (request, response) => {
             return response.status(404).send("Error: ID not found")
         todos[todoIndex].complete = true
         fs.writeFile('./store/todos.json', JSON.stringify(todos), () =>
-            response.status(200).json({ 'status': 'ok', 'id': id }))
+            response.status(200).json({ 'status': 'Completed', 'id': id }))
     })
 })
 
