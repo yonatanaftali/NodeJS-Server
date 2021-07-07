@@ -9,7 +9,7 @@ app.get('/', (request, response) => {
 })
 
 // Define port for inbound traffic
-// Express doens't send anything back from the listen function, so the callback function doesn't receive any parameters
+// Express doens't send anything back from the listen function, so the callback function doesn't receive any parameter
 app.listen(3000, () => {
     console.log("Application is running on http://localhost:3000")
 })
