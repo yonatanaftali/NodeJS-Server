@@ -23,7 +23,7 @@ app.put('/todos/:id/complete', (request, response) => {
 
     const findToDoById = (todos, id) => {
         for (let i = 0; i < todos.length; i++) {
-            if (todos[i].id === parseInt(id))
+            if (todos[i].id === id)
                 return i
         }
         return -1 // in case we didn't find the item
@@ -32,13 +32,14 @@ app.put('/todos/:id/complete', (request, response) => {
     fs.readFile('./store/todos.json', 'utf-8', (err, data) => {
         if (err)
             return response.status(500).send("Error: Can't read todo file")
-        const todos = JSON.parse(data)
-        const id = request.params.id
+        let todos = JSON.parse(data)
+        const id = parseInt(request.params.id)
         const todoIndex = findToDoById(todos, id)
         if (todoIndex === -1)
             return response.status(404).send("Error: ID not found")
-        else
-            return response.status(200).send(todos[todoIndex])
+        todos[todoIndex].complete = true
+        fs.writeFile('./store/todos.json', JSON.stringify(todos), () =>
+            response.status(200).json({ 'status': 'ok', 'id': id }))
     })
 })
 
