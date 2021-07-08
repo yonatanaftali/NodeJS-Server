@@ -8,3 +8,6 @@ NodeJS Express backend supporting basic ToDo list manipulations, including:
 |Add item  | POST |http://localhost:3000/todo requires the JSON body: {"name":  _name}|
 
 [Postman collection of these API calls](https://www.getpostman.com/collections/3e0d6d0f2e636aac5f68)
+
+DNS Name: alb-naftayo-todolist-1211355611.us-east-2.elb.amazonaws.com
+Public IP: 3.128.197.73
