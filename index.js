@@ -72,6 +72,23 @@ app.post('/todo', (request, response) => {
     })
 })
 
+// Delete an item
+app.delete('/todo', (request, response) => {
+    if (!request.body.name)
+        return response.status(400).send("Missing name")
+    fs.readFile('./store/todos.json', 'utf-8', (err, data) => {
+        if (err)
+            return response.status(500).send("Error: Can't read todo file")
+        let todos = JSON.parse(data)
+        const todoIndex = todos.findIndex(item => item.name === request.body.name)
+        if (todoIndex === -1)
+            return response.status(404).send("Error: Task not found")
+        todos.splice(todoIndex, 1)
+        fs.writeFile('./store/todos.json', JSON.stringify(todos), () =>
+            response.status(200).json({ 'Action': 'Deleting a todo item', 'status': 'success', 'name': request.body.name }))
+    })
+})
+
 // Define port for inbound traffic
 // Express doens't send anything back from the listen function, so the callback function doesn't receive any parameter
 app.listen(3000, () => {
